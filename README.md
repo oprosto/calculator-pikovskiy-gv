@@ -12,68 +12,40 @@
 Для сборки проекта выполните команду:
 ```bash
 make all
+```
 Эта команда создаст два артефакта:
-
 build/app.exe — исполняемый файл калькулятора.
-
 build/unit-tests.exe — исполняемый файл для юнит-тестов.
 
 Запуск калькулятора
 Целочисленный режим:
-
-bash
-Copy
+```bash
 make run-int
+```
 Режим с плавающей точкой:
-
-bash
-Copy
+```bash
 make run-float
+```
 Запуск тестов
 Юнит-тесты:
-
-bash
-Copy
+```bash
 make run-unit-test
+```
 Интеграционные тесты:
-
-bash
-Copy
+```bash
 make run-integration-tests
+```
 Очистка проекта
 Чтобы удалить все артефакты сборки, выполните:
-
-bash
-Copy
+```bash
 make clean
+```
 Как это сделано?
 Зависимости
 Основное приложение:
-
 Зависит от исходного файла src/main.c.
-
-Собирается командой:
-
-bash
-Copy
-gcc src/main.c -o build/app.exe
 Юнит-тесты:
-
 Зависят от Google Test и исходного файла src/main.c.
-
-Собираются командой:
-
-bash
-Copy
-g++ -isystem $(GTEST_DIR)/include -pthread tests/unit/test_a_plus_b.cpp build/gtest/gtest_main.a build/app-test.o -o build/unit-tests.exe
 Интеграционные тесты:
-
 Зависят от Python и библиотеки pytest.
-
-Запускаются через виртуальное окружение:
-
-bash
-Copy
-python3 -m venv venv
-. venv/bin/activate && pip install pytest
-pytest tests/integration/
+Запускаются через виртуальное окружение.
