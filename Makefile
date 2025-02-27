@@ -17,7 +17,7 @@ run-float: build/app.exe
 	build/app.exe --float
 
 # Run all tests
-run-unit-tests: build/unit-tests.exe
+run-unit-test: build/unit-tests.exe
 	build/unit-tests.exe
 
 build/app.exe:
@@ -28,9 +28,15 @@ build/app-test.o:
 
 build/unit-tests.exe: build/gtest/gtest_main.a build/app-test.o
 	g++ -isystem $(GTEST_DIR)/include -pthread \
-		tests/unit/test_a_plus_b.cpp \
+		tests/unit/test.cpp \
 		build/gtest/gtest_main.a build/app-test.o \
 		-o build/unit-tests.exe
+#venv:
+
+#run-integration-tests:
+
+format:
+	find . -name '*.c' -o -name '*.h' -o -name '*.cpp' -o -name '*.hpp' | xargs clang-format -i
 
 ####################################
 # BUILD GOOGLE TEST STATIC LIBRARY #
