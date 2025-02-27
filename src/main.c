@@ -247,7 +247,7 @@ Tuple** PRN(char* string)
         }
         // printf("NEW\n");
         c = string[i];
-        // printf("%c", c);        
+        // printf("%c", c);
         if (c == EOF) //ИСПРАВИТЬ НА EOF
         {
 
@@ -263,10 +263,9 @@ Tuple** PRN(char* string)
 
             while (stack->top > 0) {
                 int r = Pop(stack);
-                if(r == OB)
-                {
-                  printf("Wrong input");
-                  return NULL;
+                if (r == OB) {
+                    printf("Wrong input");
+                    return NULL;
                 }
                 Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
                 newTuple->type = 1;
