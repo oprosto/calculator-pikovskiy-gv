@@ -3,3 +3,6 @@
 *.o
 googletest/
 build/
+myenv/
+.pytest_cache/
+__pychache__/

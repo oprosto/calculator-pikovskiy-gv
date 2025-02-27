@@ -247,9 +247,10 @@ Tuple** PRN(char* string)
         }
         // printf("NEW\n");
         c = string[i];
-        // printf("%c", c);
+        // printf("%c", c);        
         if (c == EOF) //ИСПРАВИТЬ НА EOF
         {
+
             if (number != 0) {
                 Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
                 newTuple->type = 0;
@@ -259,8 +260,14 @@ Tuple** PRN(char* string)
 
                 number = 0;
             }
+
             while (stack->top > 0) {
                 int r = Pop(stack);
+                if(r == OB)
+                {
+                  printf("Wrong input");
+                  return NULL;
+                }
                 Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
                 newTuple->type = 1;
                 newTuple->operation = (enum Lexem)r;
