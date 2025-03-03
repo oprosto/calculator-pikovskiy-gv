@@ -1,6 +1,6 @@
 
 #pragma once
-#define MAXSIZE 1024
+#define MAXSIZE 1025
 typedef enum Lexem {
 
     Add = -8,

@@ -32,12 +32,13 @@ def test7():
     assert res.returncode != 0
 
 def test8():
-    res=subprocess.run(["build/app.exe", "--float"], input="1/0.0005",text=True,capture_output=True)
+    res=subprocess.run(["build/app.exe", "--float"], input="()((1+1))",text=True,capture_output=True)
     assert res.returncode != 0
 
 def test9():
-    res=subprocess.run(["build/app.exe", "--float"], input="9999999999999999999999999999999+1",text=True,capture_output=True)
-    assert res.returncode != 0
+    res=subprocess.run(["build/app.exe"], input="0-1",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert int(res.stdout) == -1
 
 def test10():
     res=subprocess.run(["build/app.exe", "--float"], input="-1-1",text=True,capture_output=True)

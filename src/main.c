@@ -126,6 +126,10 @@ int ResultD(Tuple** tuple)
         }
         i++;
     }
+    if (stack->top > 1) {
+        printf("Wrong input");
+        return -1;
+    }
     printf("%.4f", stack->data[0]);
     free(stack);
     return 0;
@@ -227,6 +231,10 @@ int Result(Tuple** tuple)
         }
         i++;
     }
+    if (stack->top > 1) {
+        printf("Wrong input");
+        return -1;
+    }
     printf("%d", stack->data[0]);
     free(stack);
     return 0;
@@ -240,8 +248,10 @@ Tuple** PRN(char* string)
     Stack* stack = (Stack*)malloc(sizeof(Stack));
     stack->top = 0;
     int number = 0;
+    int isNum = 0;
+    int isSign = 1;
     for (int i = 0; i < MAXSIZE; i++) {
-        if (sizeof(stack) > 1024) {
+        if (sizeof(stack) > MAXSIZE) {
             printf("UB: input more than 1KB. README for help");
             return NULL;
         }
@@ -250,8 +260,11 @@ Tuple** PRN(char* string)
         // printf("%c", c);
         if (c == EOF) //ИСПРАВИТЬ НА EOF
         {
-
-            if (number != 0) {
+            if (isSign == 1) {
+                printf("Wrong input");
+                return NULL;
+            }
+            if (isNum != 0) {
                 Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
                 newTuple->type = 0;
                 newTuple->number = number;
@@ -259,6 +272,8 @@ Tuple** PRN(char* string)
                 j++;
 
                 number = 0;
+                isNum = 0;
+                isSign = 0;
             }
 
             while (stack->top > 0) {
@@ -283,8 +298,10 @@ Tuple** PRN(char* string)
 
         if (c >= '0' && c <= '9') {
             number = number * 10 + (c - 48);
+            isNum = 1;
+            isSign = 0;
         } else {
-            if (number != 0) {
+            if (isNum != 0) {
                 if (number > 2000000000) {
                     printf("UB:Number too big. README file for help");
                 }
@@ -295,10 +312,16 @@ Tuple** PRN(char* string)
                 j++;
 
                 number = 0;
+                isNum = 0;
+                isSign = 0;
             }
 
             switch (c) {
             case '+': {
+                if (isSign == 1) {
+                    printf("Wrong input");
+                    return NULL;
+                }
                 while (Top(stack) == Add || Top(stack) == Sub || Top(stack) == Mult || Top(stack) == Div) {
                     enum Lexem op = (Lexem)Pop(stack);
                     Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
@@ -307,10 +330,15 @@ Tuple** PRN(char* string)
                     tuple[j] = newTuple;
                     j++;
                 }
+                isSign = 1;
                 Push(stack, Add);
                 break;
             }
             case '-': {
+                if (isSign == 1) {
+                    printf("Wrong input");
+                    return NULL;
+                }
                 while (Top(stack) == Add || Top(stack) == Sub || Top(stack) == Mult || Top(stack) == Div) {
                     enum Lexem op = (Lexem)Pop(stack);
                     Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
@@ -319,10 +347,15 @@ Tuple** PRN(char* string)
                     tuple[j] = newTuple;
                     j++;
                 }
+                isSign = 1;
                 Push(stack, Sub);
                 break;
             }
             case '*': {
+                if (isSign == 1) {
+                    printf("Wrong input");
+                    return NULL;
+                }
                 while (Top(stack) == Div || Top(stack) == Mult) {
                     enum Lexem op = (Lexem)Pop(stack);
                     Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
@@ -331,10 +364,15 @@ Tuple** PRN(char* string)
                     tuple[j] = newTuple;
                     j++;
                 }
+                isSign = 1;
                 Push(stack, Mult);
                 break;
             }
             case '/': {
+                if (isSign == 1) {
+                    printf("Wrong input");
+                    return NULL;
+                }
                 while (Top(stack) == Div || Top(stack) == Mult) {
                     enum Lexem op = (Lexem)Pop(stack);
                     Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
@@ -343,11 +381,22 @@ Tuple** PRN(char* string)
                     tuple[j] = newTuple;
                     j++;
                 }
+                isSign = 1;
                 Push(stack, Div);
                 break;
             }
             case '(': {
                 Push(stack, OB);
+                int j = i + 1;
+                while (1) {
+                    if (string[j] == ' ' || string[j] == '\r' || string[j] == '\n' || string[j] == '\t' || string[j] == '\f' || string[j] == '\v')
+                        j += 1;
+                    else if (string[j] == ')') {
+                        printf("Wrong input");
+                        return NULL;
+                    } else
+                        break;
+                }
                 break;
             }
             case ')': {
@@ -357,8 +406,10 @@ Tuple** PRN(char* string)
                         return NULL;
                     }
                     int r = Pop(stack);
+
                     if (r == OB)
                         break;
+
                     Tuple* newTuple = (Tuple*)malloc(sizeof(Tuple));
                     newTuple->type = 1;
                     newTuple->operation = (enum Lexem)r;

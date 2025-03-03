@@ -10,6 +10,11 @@ all: build/app.exe build/unit-tests.exe
 clean:
 	@rm -rf build
 	@rm -rf $(VENV_DIR)
+	@rm -rf tests/integration/__pycache__
+
+# Run the normal C application
+run: build/app.exe
+	@build/app.exe
 
 # Run the normal C application
 run-int: build/app.exe
@@ -19,6 +24,9 @@ run-int: build/app.exe
 run-float: build/app.exe
 	@build/app.exe --float
 
+# Run all tests
+RUT: build/unit-tests.exe
+	@build/unit-tests.exe
 # Run all tests
 run-unit-test: build/unit-tests.exe
 	@build/unit-tests.exe
@@ -37,6 +45,9 @@ build/unit-tests.exe: build/gtest/gtest_main.a build/app-test.o
 venv:
 	@python3 -m venv $(VENV_DIR)
 	@. $(VENV_DIR)/bin/activate && pip install pytest
+
+RIT: build/app.exe venv tests/integration/test.py
+	@. $(VENV_DIR)/bin/activate && $(PYTEST) tests/integration/test.py
 
 run-integration-tests: build/app.exe venv tests/integration/test.py
 	@. $(VENV_DIR)/bin/activate && $(PYTEST) tests/integration/test.py
