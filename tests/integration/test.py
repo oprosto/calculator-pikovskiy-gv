@@ -11,7 +11,7 @@ def test2():
     assert float(res.stdout) == 4444.8
 
 def test3():
-    res=subprocess.run(["build/app.exe", "--float"], input="1000000001 * 2",text=True,capture_output=True)
+    res=subprocess.run(["build/app.exe", "--float"], input="https://github.com/Starl1t",text=True,capture_output=True)
     assert res.returncode != 0
 
 def test4():
